@@ -1,0 +1,5 @@
+APIID,API_type,ProviderID,ProviderName,Key,URL
+1,LLM,openai,OpenAI,,https://api.openai.com/v1
+2,speech-to-text,elevenlabs,ElevenLabs,,https://api.elevenlabs.io
+3,text-to-speech,elevenlabs,ElevenLabs,,https://api.elevenlabs.io
+4,dictionary,free,Free Dictionary API,,https://api.dictionaryapi.dev/api/v2/entries/en

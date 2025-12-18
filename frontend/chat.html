@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Chat AI - Chat</title>
+    <link rel="stylesheet" href="css/style.css?v=2">
+    <link rel="stylesheet" href="css/chat.css?v=2">
+</head>
+<body class="chat-body">
+    <!-- Header -->
+    <div class="chat-header">
+        <div class="header-left">
+            <h1 class="chat-logo">🗣️ English Chat AI</h1>
+        </div>
+        <div class="header-right">
+            <span id="user-name"></span>
+            <button class="btn-icon" onclick="logout()" title="Đăng xuất">
+                🚪
+            </button>
+        </div>
+    </div>
+    
+    <div class="chat-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <button class="btn btn-primary" onclick="createNewConversation()">
+                ➕ Cuộc hội thoại mới
+            </button>
+            
+            <div class="conversation-list" id="conversation-list">
+                <!-- Conversations will be loaded here -->
+            </div>
+        </div>
+        
+        <!-- Chat Area -->
+        <div class="chat-area">
+            <!-- Welcome Screen -->
+            <div id="welcome-screen" class="welcome-screen">
+                <h2>👋 Chào mừng đến với English Chat AI!</h2>
+                <p>Bắt đầu cuộc hội thoại mới để luyện tập tiếng Anh</p>
+            </div>
+            
+            <!-- Chat Screen -->
+            <div id="chat-screen" class="chat-screen" style="display: none;">
+                <!-- Messages Container -->
+                <div class="messages-container" id="messages-container">
+                    <!-- Messages will be loaded here -->
+                </div>
+                
+                <!-- Input Area -->
+                <div class="input-area">
+                    <div class="input-controls">
+                        <button class="btn-icon" id="mic-btn" onclick="toggleRecording()" title="Ghi âm">
+                            🎤
+                        </button>
+                        <input type="text" id="message-input" placeholder="Nhập tin nhắn..." 
+                               onkeypress="handleKeyPress(event)">
+                        <button class="btn-icon" onclick="sendTextMessage()" title="Gửi">
+                            ➤
+                        </button>
+                    </div>
+                    <div class="input-options">
+                        <button class="btn-voice-mode" id="voice-mode-btn" onclick="toggleVoiceMode()" title="Bắt đầu chế độ hội thoại liên tục">
+                            <span class="voice-icon">▶</span>
+                            <span class="voice-text">Voice Mode</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Vocabulary Modal -->
+    <div id="vocab-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeVocabModal()">×</span>
+            <h3 id="vocab-word"></h3>
+            <div id="vocab-pronunciation"></div>
+            <div id="vocab-meaning"></div>
+            <audio id="vocab-audio" controls style="display: none;"></audio>
+            <button class="btn btn-primary" onclick="playVocabAudio()">🔊 Nghe phát âm</button>
+        </div>
+    </div>
+    
+    <!-- Audio Recording Modal -->
+    <div id="recording-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3>🎤 Đang ghi âm...</h3>
+            <p>Nhấn nút để dừng ghi âm</p>
+            <button class="btn btn-primary" onclick="stopRecording()">⏹ Dừng ghi âm</button>
+        </div>
+    </div>
+    
+    <!-- Transcript Edit Modal -->
+    <div id="transcript-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3>✏️ Chỉnh sửa văn bản</h3>
+            <textarea id="transcript-text" rows="4"></textarea>
+            <div class="modal-buttons">
+                <button class="btn btn-primary" onclick="sendEditedTranscript()">Gửi</button>
+                <button class="btn btn-secondary" onclick="closeTranscriptModal()">Hủy</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/api.js?v=2"></script>
+    <script src="js/utils.js?v=2"></script>
+    <script src="js/audio.js?v=2"></script>
+    <script src="js/chat.js?v=2"></script>
+</body>
+</html>

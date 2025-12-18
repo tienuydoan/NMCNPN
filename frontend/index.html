@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Chat AI - Login</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="auth-box">
+            <h1 class="logo">🗣️ English Chat AI</h1>
+            <p class="subtitle">Practice English Conversation with AI</p>
+            
+            <!-- Login Form -->
+            <div id="login-form" class="form-container">
+                <h2>Đăng nhập</h2>
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label for="login-username">Tên đăng nhập</label>
+                        <input type="text" id="login-username" name="tai_khoan" required 
+                               placeholder="Nhập tên đăng nhập">
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Mật khẩu</label>
+                        <input type="password" id="login-password" name="mat_khau" required 
+                               placeholder="Nhập mật khẩu">
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="login-btn">
+                        Đăng nhập
+                    </button>
+                </form>
+                <p class="switch-form">
+                    Chưa có tài khoản? 
+                    <a href="#" onclick="showRegisterForm()">Đăng ký ngay</a>
+                </p>
+            </div>
+            
+            <!-- Register Form -->
+            <div id="register-form" class="form-container" style="display: none;">
+                <h2>Đăng ký</h2>
+                <form id="registerForm" onsubmit="handleRegister(event)">
+                    <div class="form-group">
+                        <label for="register-username">Tên đăng nhập</label>
+                        <input type="text" id="register-username" name="tai_khoan" required 
+                               placeholder="Nhập tên đăng nhập" minlength="3">
+                    </div>
+                    <div class="form-group">
+                        <label for="register-fullname">Họ và tên</label>
+                        <input type="text" id="register-fullname" name="ho_ten" required 
+                               placeholder="Nhập họ và tên">
+                    </div>
+                    <div class="form-group">
+                        <label for="register-password">Mật khẩu</label>
+                        <input type="password" id="register-password" name="mat_khau" required 
+                               placeholder="Nhập mật khẩu" minlength="6">
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="register-btn">
+                        Đăng ký
+                    </button>
+                </form>
+                <p class="switch-form">
+                    Đã có tài khoản? 
+                    <a href="#" onclick="showLoginForm()">Đăng nhập</a>
+                </p>
+            </div>
+            
+            <!-- Error/Success Messages -->
+            <div id="message" class="message" style="display: none;"></div>
+        </div>
+    </div>
+    
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>

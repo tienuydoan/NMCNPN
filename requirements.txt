@@ -1,0 +1,7 @@
+flask
+flask-cors
+litellm
+elevenlabs
+python-dotenv
+bcrypt
+requests
