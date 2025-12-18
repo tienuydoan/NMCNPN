@@ -17,19 +17,19 @@ User sẽ có 2 chức năng lớn chính là:
 
 ## 2. Class Diagram
 <figure>
-	<a href="./Class%20Diagram.jpg"><img src="./Class%20Diagram.jpg" alt="Class Diagram" width="720"></a>
+	<a href="./image/Class%20Diagram.jpg"><img src="./image/Class%20Diagram.jpg" alt="Class Diagram" width="720"></a>
 	<figcaption>Class Diagram — Mô tả các lớp chính và mối quan hệ.</figcaption>
 </figure>
 
 
 ## 3. Database Design
 <figure>
-	<a href="./Database.png"><img src="./Database.png" alt="Database Diagram" width="720"></a>
+	<a href="./image/Database.png"><img src="./image/Database.png" alt="Database Diagram" width="720"></a>
 	<figcaption>Database Design — Sơ đồ cơ sở dữ liệu.</figcaption>
 </figure>
 
 ## 4. Thiết kế kiến trúc 3 lớp
 <figure>
-	<a href="./3Layer.jpg"><img src="./3Layer.jpg" alt="3-Layer Architecture" width="720"></a>
+	<a href="./image/3Layer.jpg"><img src="./image/3Layer.jpg" alt="3-Layer Architecture" width="720"></a>
 	<figcaption>Thiết kế 3 lớp — Sơ đồ kiến trúc ứng dụng (Presentation, Business, Data).</figcaption>
 </figure>
