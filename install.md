@@ -21,21 +21,17 @@ pip --version
 # Windows
 python -m venv venv
 venv\Scripts\activate
-
-# macOS/Linux
-python3 -m venv venv
-source venv/bin/activate
 ```
 
-## Bước 4: Cài đặt dependencies
+## Bước 3: Cài đặt dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## Bước 5: Cấu hình API Keys
+## Bước 4: Cấu hình API Keys
 
-### 5.1. Tạo file .env từ template:
+### 4.1. Tạo file .env từ template:
 
 ```bash
 # Windows
@@ -45,7 +41,7 @@ copy .env.example .env
 cp .env.example .env
 ```
 
-### 5.2. Chỉnh sửa file .env:
+### 4.2. Chỉnh sửa file .env:
 
 Mở file `.env` bằng text editor và cập nhật các thông tin:
 
