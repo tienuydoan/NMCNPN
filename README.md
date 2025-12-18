@@ -33,3 +33,15 @@ User sẽ có 2 chức năng lớn chính là:
 	<a href="./image/3Layer.jpg"><img src="./image/3Layer.jpg" alt="3-Layer Architecture" width="720"></a>
 	<figcaption>Thiết kế 3 lớp — Sơ đồ kiến trúc ứng dụng (Presentation, Business, Data).</figcaption>
 </figure>
+
+## 5. Cài đặt chương trình
+Tuân thủ các bước của [install.md](install.md)
+Các bước khởi đầu:
+1. Vào trang login: http://127.0.0.1:5000/
+2. Thực hiện đăng ký tài khoản hoặc sử dụng tài khoản hiện có (tienuydoan/123456)
+3. Tạo hội thoại mới
+4. Tiến hành chat thử
+5. Nhấn nghe câu trả lời (chờ khoảng 5s để tạo audio)
+6. Chọn một từ để dịch thử
+7. Sử dụng tính năng ghi âm giọng nói để nhận diện text
+8. Sử dụng voice mode
