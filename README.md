@@ -2,7 +2,7 @@
 
 ## 1. UseCase Diagram
 <figure>
-	<a href="./UseCase%20Diagram.jpg"><img src="./UseCase%20Diagram.jpg" alt="Use Case Diagram" width="720"></a>
+	<a href="./image/UseCase%20Diagram.jpg"><img src="./image/UseCase%20Diagram.jpg" alt="Use Case Diagram" width="720"></a>
 	<figcaption>Use Case Diagram — Mô tả các tương tác chính giữa người dùng và hệ thống.</figcaption>
 </figure>
 
