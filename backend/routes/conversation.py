@@ -8,10 +8,8 @@ from database.conversation_db import ConversationDB, MessageDB
 from backend.utils.validators import validate_message
 import base64
 
-# Create blueprint
 conversation_bp = Blueprint('conversation', __name__, url_prefix='/api/conversation')
 
-# Initialize database managers
 conversation_db = ConversationDB(db)
 message_db = MessageDB(db)
 
@@ -28,7 +26,6 @@ def get_current_user():
 
 @conversation_bp.route('/new', methods=['POST'])
 def new_conversation():
-    """Tạo cuộc hội thoại mới"""
     try:
         user = get_current_user()
         if not user:
@@ -52,7 +49,6 @@ def new_conversation():
 
 @conversation_bp.route('/list', methods=['GET'])
 def list_conversations():
-    """Lấy danh sách hội thoại của user"""
     try:
         user = get_current_user()
         if not user:
@@ -70,7 +66,6 @@ def list_conversations():
 
 @conversation_bp.route('/<int:conversation_id>', methods=['GET'])
 def get_conversation(conversation_id):
-    """Lấy chi tiết cuộc hội thoại"""
     try:
         user = get_current_user()
         if not user:
@@ -105,25 +100,20 @@ def get_conversation(conversation_id):
 
 @conversation_bp.route('/message/send', methods=['POST'])
 def send_message():
-    """Gửi tin nhắn (text hoặc audio)"""
     try:
         user = get_current_user()
         if not user:
             return jsonify({'success': False, 'error': 'Unauthorized'}), 401
         
-        # Check if it's form data (audio) or JSON (text)
         if request.content_type and 'multipart/form-data' in request.content_type:
-            # Audio message
             return handle_audio_message(user)
         else:
-            # Text message
             return handle_text_message(user)
         
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 500
 
 def handle_text_message(user):
-    """Handle text message"""
     data = request.get_json()
     
     if not data:
@@ -135,29 +125,24 @@ def handle_text_message(user):
     if not conversation_id or not message_text:
         return jsonify({'success': False, 'error': 'Missing required fields'}), 400
     
-    # Validate message
     valid, error = validate_message(message_text)
     if not valid:
         return jsonify({'success': False, 'error': error}), 400
     
-    # Verify conversation belongs to user
     conversation = conversation_db.get_conversation(conversation_id)
     if not conversation or conversation.UserID != user.UserID:
         return jsonify({'success': False, 'error': 'Invalid conversation'}), 403
     
-    # Save user message
     user_msg = message_db.create_user_message(conversation_id, message_text)
     
-    # Get conversation history for context
     messages = message_db.get_conversation_messages(conversation_id)
     history = []
-    for msg in messages[:-1]:  # Exclude the just-added message
+    for msg in messages[:-1]:
         if msg['type'] == 'user':
             history.append({"role": "user", "content": msg['message'].Message})
         else:
             history.append({"role": "assistant", "content": msg['message'].Message})
     
-    # Get AI response
     llm_result = llm_service.chat_completion(
         messages=[{"role": "user", "content": message_text}],
         conversation_history=history
@@ -166,7 +151,6 @@ def handle_text_message(user):
     if not llm_result['success']:
         return jsonify({'success': False, 'error': llm_result['error']}), 500
     
-    # Save AI message
     ai_msg = message_db.create_ai_message(
         conversation_id,
         llm_result['response'],
@@ -187,18 +171,14 @@ def handle_audio_message(user):
     if not conversation_id or not audio_file:
         return jsonify({'success': False, 'error': 'Missing required fields'}), 400
     
-    # Verify conversation
     conversation = conversation_db.get_conversation(int(conversation_id))
     if not conversation or conversation.UserID != user.UserID:
         return jsonify({'success': False, 'error': 'Invalid conversation'}), 403
     
-    # Read audio content
     audio_content = audio_file.read()
     
-    # Get audio format from filename
     audio_format = audio_file.filename.split('.')[-1] if '.' in audio_file.filename else 'wav'
     
-    # Transcribe audio
     stt_result = stt_service.transcribe_audio(audio_content, audio_format)
     
     if not stt_result['success']:
@@ -220,23 +200,19 @@ def text_to_speech(message_id):
         if not user:
             return jsonify({'success': False, 'error': 'Unauthorized'}), 401
         
-        # Get AI message
         ai_msg = message_db.get_ai_message(message_id)
         if not ai_msg:
             return jsonify({'success': False, 'error': 'Message not found'}), 404
         
-        # Verify user owns this conversation
         conversation = conversation_db.get_conversation(ai_msg.ConversationID)
         if not conversation or conversation.UserID != user.UserID:
             return jsonify({'success': False, 'error': 'Forbidden'}), 403
         
-        # Generate speech
         tts_result = tts_service.synthesize_speech(ai_msg.Message)
         
         if not tts_result['success']:
             return jsonify({'success': False, 'error': tts_result['error']}), 500
         
-        # Read audio file and return as base64
         audio_content = tts_service.get_audio_content(tts_result['audio_path'])
         if not audio_content:
             return jsonify({'success': False, 'error': 'Failed to read audio file'}), 500

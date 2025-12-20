@@ -5,8 +5,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class Config:
-    """Configuration class để quản lý environment variables"""
-    
     # Flask settings
     SECRET_KEY = os.getenv('SECRET_KEY', 'dev-secret-key-change-in-production')
     DEBUG = os.getenv('DEBUG', 'True') == 'True'
@@ -59,7 +57,6 @@ class Config:
     
     @classmethod
     def validate(cls):
-        """Kiểm tra các config cần thiết"""
         warnings = []
         
         if not cls.LITELLM_API_KEY:

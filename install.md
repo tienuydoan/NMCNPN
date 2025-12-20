@@ -18,7 +18,6 @@ pip --version
 ## Bước 2: Tạo virtual environment (khuyến nghị)
 
 ```bash
-# Windows
 python -m venv venv
 venv\Scripts\activate
 ```
@@ -34,11 +33,7 @@ pip install -r requirements.txt
 ### 4.1. Tạo file .env từ template:
 
 ```bash
-# Windows
 copy .env.example .env
-
-# macOS/Linux
-cp .env.example .env
 ```
 
 ### 4.2. Chỉnh sửa file .env:

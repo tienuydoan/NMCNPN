@@ -10,7 +10,6 @@ auth_bp = Blueprint('auth', __name__, url_prefix='/api/auth')
 
 @auth_bp.route('/register', methods=['POST'])
 def register():
-    """Đăng ký user mới"""
     try:
         data = request.get_json()
         
@@ -27,7 +26,6 @@ def register():
                 'error': 'Vui lòng điền đầy đủ thông tin'
             }), 400
         
-        # Register user
         result = auth_service.register(tai_khoan, mat_khau, ho_ten)
         
         if result['success']:
@@ -43,7 +41,6 @@ def register():
 
 @auth_bp.route('/login', methods=['POST'])
 def login():
-    """Đăng nhập"""
     try:
         data = request.get_json()
         
@@ -59,11 +56,9 @@ def login():
                 'error': 'Vui lòng điền đầy đủ thông tin'
             }), 400
         
-        # Login
         result = auth_service.login(tai_khoan, mat_khau)
         
         if result['success']:
-            # Store token in session
             session['token'] = result['token']
             return jsonify(result), 200
         else:
@@ -82,13 +77,11 @@ def logout():
         token = request.headers.get('Authorization') or session.get('token')
         
         if token:
-            # Remove "Bearer " prefix if present
             if token.startswith('Bearer '):
                 token = token[7:]
             
             auth_service.logout(token)
         
-        # Clear session
         session.clear()
         
         return jsonify({'success': True}), 200
@@ -111,7 +104,6 @@ def verify():
                 'error': 'No token provided'
             }), 401
         
-        # Remove "Bearer " prefix if present
         if token.startswith('Bearer '):
             token = token[7:]
         

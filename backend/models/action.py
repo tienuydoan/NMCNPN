@@ -1,8 +1,6 @@
 from typing import Dict, Optional
 
 class Action:
-    """Action (API call log) model class"""
-    
     def __init__(self, ActionID: int, APIID: int, Request: str, 
                  RequestTime: str, Response: str = "", ResponseTime: str = ""):
         self.ActionID = int(ActionID)
@@ -13,7 +11,6 @@ class Action:
         self.ResponseTime = ResponseTime
     
     def to_dict(self) -> Dict:
-        """Convert to dictionary"""
         return {
             'ActionID': self.ActionID,
             'APIID': self.APIID,
@@ -24,7 +21,6 @@ class Action:
         }
     
     def to_csv_dict(self) -> Dict:
-        """Convert to dictionary for CSV storage"""
         return {
             'ActionID': str(self.ActionID),
             'APIID': str(self.APIID),
@@ -36,7 +32,6 @@ class Action:
     
     @staticmethod
     def from_csv_dict(data: Dict) -> 'Action':
-        """Create Action object from CSV dictionary"""
         return Action(
             ActionID=data['ActionID'],
             APIID=data['APIID'],
@@ -47,8 +42,6 @@ class Action:
         )
 
 class ThirdPartyAPI:
-    """Third Party API configuration model class"""
-    
     def __init__(self, APIID: int, API_type: str, ProviderID: str, 
                  ProviderName: str, Key: str = "", URL: str = ""):
         self.APIID = int(APIID)
@@ -59,7 +52,6 @@ class ThirdPartyAPI:
         self.URL = URL
     
     def to_dict(self) -> Dict:
-        """Convert to dictionary"""
         return {
             'APIID': self.APIID,
             'API_type': self.API_type,
@@ -70,7 +62,6 @@ class ThirdPartyAPI:
         }
     
     def to_csv_dict(self) -> Dict:
-        """Convert to dictionary for CSV storage"""
         return {
             'APIID': str(self.APIID),
             'API_type': self.API_type,
@@ -82,7 +73,6 @@ class ThirdPartyAPI:
     
     @staticmethod
     def from_csv_dict(data: Dict) -> 'ThirdPartyAPI':
-        """Create ThirdPartyAPI object from CSV dictionary"""
         return ThirdPartyAPI(
             APIID=data['APIID'],
             API_type=data['API_type'],

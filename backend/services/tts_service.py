@@ -27,14 +27,11 @@ class TTSService:
         self.model_id = Config.ELEVENLABS_MODEL_ID
         self.audio_dir = Config.AUDIO_DIR
         
-        # Ensure audio directory exists
         if not os.path.exists(self.audio_dir):
             os.makedirs(self.audio_dir)
         
-        # Get API config from database
         self.api_config = self.api_db.get_api_by_type('text-to-speech')
         
-        # Initialize client if available
         if ELEVENLABS_AVAILABLE and self.api_key:
             try:
                 self.client = ElevenLabs(api_key=self.api_key)
@@ -68,7 +65,6 @@ class TTSService:
             }
         
         try:
-            # Log request
             request_data = {
                 'text': text,
                 'voice_id': self.voice_id,
@@ -81,14 +77,12 @@ class TTSService:
                 request=request_data
             )
             
-            # Map output format to ElevenLabs format
             format_map = {
                 'mp3': 'mp3_44100_128',
                 'wav': 'pcm_44100'
             }
             elevenlabs_format = format_map.get(output_format.lower(), 'mp3_44100_128')
             
-            # Call ElevenLabs API
             audio_generator = self.client.text_to_speech.convert(
                 text=text,
                 voice_id=self.voice_id,
@@ -96,19 +90,16 @@ class TTSService:
                 output_format=elevenlabs_format
             )
             
-            # Collect audio bytes from generator
             audio_content = b""
             for chunk in audio_generator:
                 audio_content += chunk
             
-            # Save audio file
             filename = self._generate_filename(text, output_format)
             audio_path = os.path.join(self.audio_dir, filename)
             
             with open(audio_path, 'wb') as out:
                 out.write(audio_content)
             
-            # Log response
             response_data = {
                 'audio_path': audio_path,
                 'audio_size': len(audio_content),
@@ -132,8 +123,6 @@ class TTSService:
             }
     
     def _generate_filename(self, text: str, format: str) -> str:
-        """Generate unique filename for audio file"""
-        # Create hash of text + timestamp
         content = f"{text}_{datetime.now().isoformat()}"
         hash_val = hashlib.md5(content.encode()).hexdigest()
         return f"tts_{hash_val}.{format}"

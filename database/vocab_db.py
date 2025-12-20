@@ -8,8 +8,6 @@ from typing import List, Optional
 from datetime import datetime
 
 class VocabularyDB:
-    """Vocabulary database operations"""
-    
     def __init__(self, db: CSVDatabase):
         self.db = db
         self.filename = "vocabulary.csv"
@@ -19,20 +17,6 @@ class VocabularyDB:
     def create_vocabulary(self, user_id: int, vocab: str, meaning: str, 
                          pronunciation: str, audio: str, 
                          action_id: Optional[int] = None) -> Vocabulary:
-        """
-        Tạo vocabulary record mới
-        
-        Args:
-            user_id: User ID
-            vocab: English word
-            meaning: Vietnamese meaning
-            pronunciation: Phonetic pronunciation
-            audio: Audio file path or URL
-            action_id: Action ID (dictionary API call)
-        
-        Returns:
-            Vocabulary object
-        """
         vocab_id = self.db.get_next_id(self.filename, 'VocabID')
         
         vocabulary = Vocabulary(
@@ -50,7 +34,6 @@ class VocabularyDB:
         return vocabulary
     
     def get_user_vocabulary(self, user_id: int) -> List[Vocabulary]:
-        """Lấy tất cả vocabulary của user"""
         data = self.db.find_all_by_field(self.filename, 'UserID', str(user_id))
         vocabs = [Vocabulary.from_csv_dict(row) for row in data]
         # Sort by time descending (newest first)
@@ -58,20 +41,17 @@ class VocabularyDB:
         return vocabs
     
     def search_user_vocabulary(self, user_id: int, search_term: str) -> List[Vocabulary]:
-        """Tìm kiếm vocabulary của user"""
         vocabs = self.get_user_vocabulary(user_id)
         search_lower = search_term.lower()
         return [v for v in vocabs if search_lower in v.Vocab.lower()]
     
     def get_vocabulary_by_id(self, vocab_id: int) -> Optional[Vocabulary]:
-        """Lấy vocabulary theo ID"""
         data = self.db.find_by_field(self.filename, 'VocabID', str(vocab_id))
         if data:
             return Vocabulary.from_csv_dict(data)
         return None
     
     def check_word_exists(self, user_id: int, vocab: str) -> Optional[Vocabulary]:
-        """Kiểm tra xem user đã tra từ này chưa"""
         vocabs = self.get_user_vocabulary(user_id)
         for v in vocabs:
             if v.Vocab.lower() == vocab.lower():

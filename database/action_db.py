@@ -9,24 +9,12 @@ from datetime import datetime
 import json
 
 class ActionDB:
-    """Action (API call log) database operations"""
-    
     def __init__(self, db: CSVDatabase):
         self.db = db
         self.filename = "action.csv"
         self.fieldnames = ['ActionID', 'APIID', 'Request', 'RequestTime', 'Response', 'ResponseTime']
     
     def create_action(self, api_id: int, request: dict) -> Action:
-        """
-        Tạo action mới (log API call request)
-        
-        Args:
-            api_id: API ID
-            request: Request data (sẽ được convert sang JSON string)
-        
-        Returns:
-            Action object
-        """
         action_id = self.db.get_next_id(self.filename, 'ActionID')
         
         action = Action(
@@ -42,16 +30,6 @@ class ActionDB:
         return action
     
     def update_action_response(self, action_id: int, response: dict) -> bool:
-        """
-        Cập nhật response cho action
-        
-        Args:
-            action_id: Action ID
-            response: Response data (sẽ được convert sang JSON string)
-        
-        Returns:
-            True if success
-        """
         action = self.get_action(action_id)
         if not action:
             return False
@@ -68,41 +46,34 @@ class ActionDB:
         )
     
     def get_action(self, action_id: int) -> Optional[Action]:
-        """Lấy action theo ID"""
         data = self.db.find_by_field(self.filename, 'ActionID', str(action_id))
         if data:
             return Action.from_csv_dict(data)
         return None
     
     def get_actions_by_api(self, api_id: int) -> List[Action]:
-        """Lấy tất cả actions của một API"""
         data = self.db.find_all_by_field(self.filename, 'APIID', str(api_id))
         return [Action.from_csv_dict(row) for row in data]
 
 class ThirdPartyAPIDB:
-    """Third Party API configuration database operations"""
-    
     def __init__(self, db: CSVDatabase):
         self.db = db
         self.filename = "thirdpartyapi.csv"
         self.fieldnames = ['APIID', 'API_type', 'ProviderID', 'ProviderName', 'Key', 'URL']
     
     def get_api_by_id(self, api_id: int) -> Optional[ThirdPartyAPI]:
-        """Lấy API config theo ID"""
         data = self.db.find_by_field(self.filename, 'APIID', str(api_id))
         if data:
             return ThirdPartyAPI.from_csv_dict(data)
         return None
     
     def get_api_by_type(self, api_type: str) -> Optional[ThirdPartyAPI]:
-        """Lấy API config theo type (LLM, speech-to-text, etc.)"""
         data = self.db.find_by_field(self.filename, 'API_type', api_type)
         if data:
             return ThirdPartyAPI.from_csv_dict(data)
         return None
     
     def update_api_key(self, api_id: int, key: str) -> bool:
-        """Cập nhật API key"""
         api = self.get_api_by_id(api_id)
         if not api:
             return False
@@ -117,6 +88,5 @@ class ThirdPartyAPIDB:
         )
     
     def get_all_apis(self) -> List[ThirdPartyAPI]:
-        """Lấy tất cả API configs"""
         data = self.db.read(self.filename)
         return [ThirdPartyAPI.from_csv_dict(row) for row in data]

@@ -5,7 +5,6 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 from flask import Blueprint, request, jsonify
 from backend.app_context import auth_service, vocab_service
 
-# Create blueprint
 vocab_bp = Blueprint('vocab', __name__, url_prefix='/api/vocab')
 
 def get_current_user():
@@ -37,7 +36,6 @@ def lookup():
         if not word:
             return jsonify({'success': False, 'error': 'Word is required'}), 400
         
-        # Lookup word
         result = vocab_service.lookup_word(word, user.UserID)
         
         if result['success']:

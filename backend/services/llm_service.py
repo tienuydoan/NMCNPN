@@ -51,23 +51,18 @@ class LLMService:
         
         
         try:
-            # Prepare messages
             all_messages = []
             
-            # Add system message
             all_messages.append({
                 "role": "system",
                 "content": "You are a helpful English conversation teacher. Help the user practice English conversation naturally and provide corrections when needed."
             })
             
-            # Add conversation history
             if conversation_history:
                 all_messages.extend(conversation_history)
             
-            # Add current messages
             all_messages.extend(messages)
             
-            # Log request
             request_data = {
                 'model': self.model,
                 'messages': all_messages
@@ -78,17 +73,14 @@ class LLMService:
                 request=request_data
             )
             
-            # Call LiteLLM
             response = litellm.completion(
                 model=self.model,
                 messages=all_messages,
                 api_key=self.api_key
             )
             
-            # Extract response text
             response_text = response.choices[0].message.content
             
-            # Extract usage information safely
             usage_info = {}
             if hasattr(response, 'usage') and response.usage:
                 try:
@@ -100,7 +92,6 @@ class LLMService:
                 except Exception as e:
                     print(f"Warning: Could not extract usage info: {e}")
             
-            # Log response
             response_data = {
                 'response': response_text,
                 'model': getattr(response, 'model', self.model),
@@ -123,14 +114,5 @@ class LLMService:
             }
     
     def simple_chat(self, user_message: str) -> Dict:
-        """
-        Simple chat without conversation history
-        
-        Args:
-            user_message: User's message
-        
-        Returns:
-            Dictionary with response
-        """
         messages = [{"role": "user", "content": user_message}]
         return self.chat_completion(messages)

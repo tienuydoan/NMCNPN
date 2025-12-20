@@ -25,10 +25,8 @@ class STTService:
         self.language = Config.ELEVENLABS_LANGUAGE
         self.model_id = Config.ELEVENLABS_STT_MODEL
         
-        # Get API config from database
         self.api_config = self.api_db.get_api_by_type('speech-to-text')
         
-        # Initialize client if available
         if ELEVENLABS_AVAILABLE and self.api_key:
             try:
                 self.client = ElevenLabs(api_key=self.api_key)
@@ -39,16 +37,6 @@ class STTService:
             self.client = None
     
     def transcribe_audio(self, audio_content: bytes, audio_format: str = 'wav') -> Dict:
-        """
-        Transcribe audio to text using ElevenLabs
-        
-        Args:
-            audio_content: Audio file content as bytes
-            audio_format: Audio format ('wav', 'mp3', etc.)
-        
-        Returns:
-            Dictionary with transcript and action_id
-        """
         if not ELEVENLABS_AVAILABLE:
             return {
                 'success': False,
@@ -62,7 +50,6 @@ class STTService:
             }
         
         try:
-            # Log request
             request_data = {
                 'audio_format': audio_format,
                 'language': self.language,
@@ -75,23 +62,19 @@ class STTService:
                 request=request_data
             )
             
-            # Prepare audio as BytesIO
             audio_data = BytesIO(audio_content)
             audio_data.name = f"audio.{audio_format}"  # Set filename for format detection
             
-            # Call ElevenLabs API
             transcription = self.client.speech_to_text.convert(
                 file=audio_data,
                 model_id=self.model_id,
                 language_code=self.language,
                 tag_audio_events=True,
-                diarize=False  # Single speaker for now
+                diarize=False
             )
             
-            # Extract transcript text
             transcript = transcription.text if hasattr(transcription, 'text') else str(transcription)
             
-            # Log response
             response_data = {
                 'transcript': transcript,
                 'model': self.model_id
@@ -113,21 +96,11 @@ class STTService:
             }
     
     def transcribe_audio_file(self, audio_path: str) -> Dict:
-        """
-        Transcribe audio from file path
-        
-        Args:
-            audio_path: Path to audio file
-        
-        Returns:
-            Dictionary with transcript
-        """
         try:
             with open(audio_path, 'rb') as f:
                 audio_content = f.read()
             
-            # Detect format from extension
-            audio_format = os.path.splitext(audio_path)[1][1:]  # Remove dot
+            audio_format = os.path.splitext(audio_path)[1][1:]
             
             return self.transcribe_audio(audio_content, audio_format)
             

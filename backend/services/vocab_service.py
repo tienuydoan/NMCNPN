@@ -19,7 +19,6 @@ class VocabService:
         self.vocab_db = VocabularyDB(db)
         self.api_url = Config.DICTIONARY_API_URL
         
-        # Get API config from database
         self.api_config = self.api_db.get_api_by_type('dictionary')
     
     def lookup_word(self, word: str, user_id: int) -> Dict:
@@ -33,7 +32,6 @@ class VocabService:
         Returns:
             Dictionary with word info (meaning, pronunciation, audio)
         """
-        # Validate word
         valid, error = validate_vocab_word(word)
         if not valid:
             return {
@@ -43,7 +41,6 @@ class VocabService:
         
         word = word.strip().lower()
         
-        # Check if already looked up
         existing = self.vocab_db.check_word_exists(user_id, word)
         if existing:
             return {
@@ -56,7 +53,6 @@ class VocabService:
             }
         
         try:
-            # Log request
             request_data = {
                 'word': word
             }
@@ -66,7 +62,6 @@ class VocabService:
                 request=request_data
             )
             
-            # Call Dictionary API
             url = f"{self.api_url}/{word}"
             response = requests.get(url, timeout=10)
             
@@ -84,17 +79,14 @@ class VocabService:
                     'error': 'Không có dữ liệu từ điển'
                 }
             
-            # Extract information
             word_data = data[0]
             
-            # Get pronunciation
             pronunciation = ""
             if 'phonetic' in word_data:
                 pronunciation = word_data['phonetic']
             elif 'phonetics' in word_data and len(word_data['phonetics']) > 0:
                 pronunciation = word_data['phonetics'][0].get('text', '')
             
-            # Get audio
             audio_url = ""
             if 'phonetics' in word_data:
                 for phonetic in word_data['phonetics']:
@@ -102,23 +94,16 @@ class VocabService:
                         audio_url = phonetic['audio']
                         break
             
-            # Get meanings (simplified - just get first definition)
             meaning = ""
             if 'meanings' in word_data and len(word_data['meanings']) > 0:
                 first_meaning = word_data['meanings'][0]
                 if 'definitions' in first_meaning and len(first_meaning['definitions']) > 0:
                     meaning = first_meaning['definitions'][0].get('definition', '')
                     
-                    # Try to get example
                     example = first_meaning['definitions'][0].get('example', '')
                     if example:
                         meaning += f"\nExample: {example}"
             
-            # Note: This API returns English definitions, not Vietnamese
-            # For Vietnamese translations, you would need a different API
-            # For now, we'll just use the English definition
-            
-            # Log response
             response_data = {
                 'word': word,
                 'pronunciation': pronunciation,
@@ -128,7 +113,6 @@ class VocabService:
             
             self.action_db.update_action_response(action.ActionID, response_data)
             
-            # Save to vocabulary history
             vocab = self.vocab_db.create_vocabulary(
                 user_id=user_id,
                 vocab=word,

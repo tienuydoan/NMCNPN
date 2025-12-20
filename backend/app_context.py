@@ -13,10 +13,8 @@ from backend.services.stt_service import STTService
 from backend.services.tts_service import TTSService
 from backend.services.vocab_service import VocabService
 
-# Initialize shared database
 db = CSVDatabase()
 
-# Initialize shared services (singletons)
 auth_service = AuthService(db)
 llm_service = LLMService(db)
 stt_service = STTService(db)
